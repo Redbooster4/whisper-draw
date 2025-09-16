@@ -12,14 +12,13 @@ interface DrawingCanvasProps {
 
 export const DrawingCanvas = ({ activeTool, activeColor, brushSize }: DrawingCanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [fabricCanvas, setFabricCanvas] = useState<FabricCanvas | null>(null);
 
   useEffect(() => {
-    if (!canvasRef.current) return;
+    if (!canvasRef.current || !containerRef.current) return;
 
     const canvas = new FabricCanvas(canvasRef.current, {
-      width: 1000,
-      height: 700,
       backgroundColor: "#ffffff",
     });
 
@@ -28,10 +27,27 @@ export const DrawingCanvas = ({ activeTool, activeColor, brushSize }: DrawingCan
     canvas.freeDrawingBrush.color = activeColor;
     canvas.freeDrawingBrush.width = brushSize;
 
+    const resize = () => {
+      const container = containerRef.current!;
+      const width = container.clientWidth || 1000;
+      const height = container.clientHeight || 600;
+      canvas.setWidth(width);
+      canvas.setHeight(height);
+      canvas.renderAll();
+    };
+
+    // Initial size
+    resize();
+
+    // Observe container size changes
+    const ro = new ResizeObserver(() => resize());
+    ro.observe(containerRef.current);
+
     setFabricCanvas(canvas);
     toast("Canvas ready! Start creating your masterpiece!");
 
     return () => {
+      ro.disconnect();
       canvas.dispose();
     };
   }, []);
@@ -107,7 +123,7 @@ export const DrawingCanvas = ({ activeTool, activeColor, brushSize }: DrawingCan
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 w-full h-full">
       <div className="flex gap-2">
         <Button
           onClick={handleClear}
@@ -128,8 +144,8 @@ export const DrawingCanvas = ({ activeTool, activeColor, brushSize }: DrawingCan
           Export
         </Button>
       </div>
-      <div className="canvas-container bg-canvas">
-        <canvas ref={canvasRef} className="block" />
+      <div ref={containerRef} className="canvas-container bg-canvas w-full h-full">
+        <canvas ref={canvasRef} className="block w-full h-full" />
       </div>
     </div>
   );
