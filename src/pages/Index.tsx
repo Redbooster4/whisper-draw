@@ -22,75 +22,83 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background p-4">
-      {/* Header */}
-      <header className="mb-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-              DrawTogether AI
-            </h1>
-            <p className="text-muted-foreground mt-1">
-              Collaborative drawing with intelligent suggestions
-            </p>
-          </div>
-          <Button 
-            onClick={handleCollaborate}
-            className="bg-gradient-to-r from-primary to-primary-glow hover:from-primary-glow hover:to-primary"
-          >
-            <Users className="w-4 h-4 mr-2" />
-            Collaborate
-          </Button>
-        </div>
-      </header>
-
-      {/* Main Layout */}
-      <div className="grid grid-cols-12 gap-6 h-[calc(100vh-8rem)]">
-        {/* Left Sidebar - Tools */}
-        <div className="col-span-2 space-y-4">
-          <ToolPanel
-            activeTool={activeTool}
-            onToolClick={setActiveTool}
-            brushSize={brushSize}
-            onBrushSizeChange={setBrushSize}
-          />
-          <ColorPicker
-            activeColor={activeColor}
-            onColorChange={setActiveColor}
-          />
-        </div>
-
-        {/* Main Canvas */}
-        <div className="col-span-8 flex items-center justify-center">
-          <DrawingCanvas
-            activeTool={activeTool}
-            activeColor={activeColor}
-            brushSize={brushSize}
-          />
-        </div>
-
-        {/* Right Sidebar - AI Suggestions */}
-        <div className="col-span-2">
-          <AISuggestions onSuggestionApply={handleSuggestionApply} />
-        </div>
-      </div>
-
-      {/* Status Bar */}
-      <div className="fixed bottom-4 left-4 right-4">
-        <div className="tool-panel p-3">
-          <div className="flex items-center justify-between text-sm">
-            <div className="flex items-center gap-4">
-              <span className="text-muted-foreground">
-                Tool: <span className="text-primary font-medium capitalize">{activeTool}</span>
-              </span>
-              <div className="w-px h-4 bg-border" />
-              <span className="text-muted-foreground">
-                Color: <span className="inline-block w-4 h-4 rounded-full border border-border ml-1" style={{ backgroundColor: activeColor }} />
-              </span>
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-6 py-6 max-w-7xl">
+        {/* Header */}
+        <header className="mb-8">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+                DrawTogether AI
+              </h1>
+              <p className="text-muted-foreground mt-2">
+                Collaborative drawing with intelligent suggestions
+              </p>
             </div>
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <Sparkles className="w-4 h-4 text-primary" />
-              <span>AI Ready</span>
+            <Button 
+              onClick={handleCollaborate}
+              className="bg-gradient-to-r from-primary to-primary-glow hover:from-primary-glow hover:to-primary shadow-lg"
+            >
+              <Users className="w-4 h-4 mr-2" />
+              Collaborate
+            </Button>
+          </div>
+        </header>
+
+        {/* Main Layout */}
+        <div className="grid grid-cols-12 gap-6 h-[calc(100vh-12rem)]">
+          {/* Left Sidebar - Tools */}
+          <div className="col-span-2 flex flex-col gap-4 h-full">
+            <ToolPanel
+              activeTool={activeTool}
+              onToolClick={setActiveTool}
+              brushSize={brushSize}
+              onBrushSizeChange={setBrushSize}
+            />
+            <ColorPicker
+              activeColor={activeColor}
+              onColorChange={setActiveColor}
+            />
+          </div>
+
+          {/* Main Canvas */}
+          <div className="col-span-8 flex items-center justify-center h-full">
+            <div className="w-full h-full flex items-center justify-center">
+              <DrawingCanvas
+                activeTool={activeTool}
+                activeColor={activeColor}
+                brushSize={brushSize}
+              />
+            </div>
+          </div>
+
+          {/* Right Sidebar - AI Suggestions */}
+          <div className="col-span-2 h-full">
+            <AISuggestions onSuggestionApply={handleSuggestionApply} />
+          </div>
+        </div>
+
+        {/* Status Bar */}
+        <div className="mt-6">
+          <div className="tool-panel p-4">
+            <div className="flex items-center justify-between text-sm">
+              <div className="flex items-center gap-6">
+                <span className="text-muted-foreground">
+                  Tool: <span className="text-primary font-medium capitalize">{activeTool}</span>
+                </span>
+                <div className="w-px h-4 bg-border" />
+                <span className="text-muted-foreground flex items-center gap-2">
+                  Color: 
+                  <span 
+                    className="inline-block w-5 h-5 rounded-full border-2 border-border" 
+                    style={{ backgroundColor: activeColor }} 
+                  />
+                </span>
+              </div>
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <Sparkles className="w-4 h-4 text-primary" />
+                <span>AI Ready</span>
+              </div>
             </div>
           </div>
         </div>
